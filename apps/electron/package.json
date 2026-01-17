@@ -12,7 +12,8 @@
     "lint": "eslint src/",
     "clean": "rm -rf dist",
     "rebuild": "npx @electron/rebuild -f -w better-sqlite3",
-    "postinstall": "npx @electron/rebuild -f -w better-sqlite3"
+    "postinstall": "npx @electron/rebuild -f -w better-sqlite3",
+    "test:e2e": "pnpm --filter @claude-team/web build && pnpm build && npx playwright test"
   },
   "dependencies": {
     "@claude-team/core": "workspace:*",
@@ -20,10 +21,12 @@
   },
   "devDependencies": {
     "@electron/rebuild": "^3.7.0",
+    "@playwright/test": "^1.49.0",
     "@types/better-sqlite3": "^7.6.11",
     "@types/node": "^22.10.0",
     "electron": "^33.2.0",
     "electron-builder": "^25.1.8",
+    "playwright": "^1.49.0",
     "tsup": "^8.3.0",
     "typescript": "^5.7.0"
   },

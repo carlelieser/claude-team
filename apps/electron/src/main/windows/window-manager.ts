@@ -51,7 +51,7 @@ export function createWindowManager(
 
     const indexPath = join(webPath, 'index.html');
 
-    if (app.isPackaged) {
+    if (app.isPackaged || process.env.NODE_ENV === 'test') {
       window.loadFile(indexPath);
     } else {
       window.loadURL('http://localhost:5173');

@@ -27,15 +27,22 @@ if (!gotSingleInstanceLock) {
       const webPath = app.isPackaged
         ? join(process.resourcesPath, 'web')
         : join(__dirname, '..', '..', '..', 'web', 'build');
+      const preloadPath = join(__dirname, '..', 'preload', 'preload.cjs');
 
       const application = await createApp({
         agentsDirectory,
         webPath,
+        preloadPath,
       });
 
       application.shortcuts.registerAll();
       application.tray.show();
       application.services.taskProcessor.start();
+
+      // Open dashboard automatically in test mode for E2E testing
+      if (process.env.NODE_ENV === 'test') {
+        application.windows.showDashboard();
+      }
 
       application.services.logger.info('Application started', {
         version: app.getVersion(),
