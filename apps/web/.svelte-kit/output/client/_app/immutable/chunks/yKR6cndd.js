@@ -1,2 +1,0 @@
-import{v as p,E as f,j as c,w as m,B as d,C as _,D as l}from"./oD9g-Rhu.js";import{b as u,d as h}from"./NTD14719.js";import{B as v}from"./B512NMS6.js";function y(a,t,...n){var r=new v(a);p(()=>{const e=t()??null;r.ensure(e,e&&(s=>e(s,...n)))},f)}function E(a){return(t,...n)=>{var r=a(...n),e;if(c)e=_,m();else{var s=r.render().trim(),i=u(s);e=l(i),t.before(e)}const o=r.setup?.(e);h(e,e),typeof o=="function"&&d(o)}}export{E as c,y as s};
-//# sourceMappingURL=yKR6cndd.js.map

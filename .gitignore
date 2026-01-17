@@ -8,8 +8,19 @@ out/
 build/
 *.tsbuildinfo
 
+# SvelteKit
+.svelte-kit/
+
+# Electron packaging
+release/
+
 # Test coverage
 coverage/
+
+# Playwright
+playwright-report/
+playwright/.cache/
+test-results/
 
 # Turbo
 .turbo/

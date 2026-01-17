@@ -1,1 +1,0 @@
-{"version":3,"file":"2.CmSUVOVs.js","sources":["../../../../../../src/routes/popup/+layout.svelte"],"sourcesContent":["<script lang=\"ts\">\n  import '../../app.css';\n\n  interface Props {\n    children: import('svelte').Snippet;\n  }\n\n  let { children }: Props = $props();\n</script>\n\n{@render children()}\n"],"names":[],"mappings":"kLAAA,4CAQQ"}
