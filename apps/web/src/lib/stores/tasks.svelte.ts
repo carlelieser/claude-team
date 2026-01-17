@@ -37,7 +37,7 @@ class TaskStore {
     }
 
     try {
-      const result = await ipc.task.list(this.filter);
+      const result = await ipc.task.list({ ...this.filter });
 
       if (result.ok) {
         this.tasks = [...result.value];

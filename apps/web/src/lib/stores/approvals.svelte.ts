@@ -38,7 +38,7 @@ class ApprovalStore {
     }
 
     try {
-      const result = await ipc.approval.list(this.filter);
+      const result = await ipc.approval.list({ ...this.filter });
 
       if (result.ok) {
         this.approvals = [...result.value];
