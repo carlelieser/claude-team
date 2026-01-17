@@ -6,7 +6,12 @@ import { ipcMain } from 'electron';
 import { success, failure, type Failure } from '@claude-team/core';
 import type { ServiceContainer } from '../../services/service-container.js';
 import type { IpcResult } from '../channels.js';
-import type { WorkspaceDto, ProjectDto } from '../../../types/dto.js';
+import type {
+  WorkspaceDto,
+  ProjectDto,
+  CreateWorkspaceDto,
+  CreateProjectDto,
+} from '../../../types/dto.js';
 import type { AppState } from '../../../types/index.js';
 
 export interface ProjectHandlersConfig {
@@ -123,6 +128,30 @@ export function registerProjectHandlers(config: ProjectHandlersConfig): void {
   );
 
   ipcMain.handle(
+    'workspace:create',
+    async (
+      _event,
+      data: CreateWorkspaceDto
+    ): Promise<IpcResult<WorkspaceDto>> => {
+      try {
+        const workspace = await services.workspaceRepository.createWorkspace({
+          name: data.name,
+          path: data.path,
+        });
+
+        services.logger.info('Created workspace', { workspaceId: workspace.id });
+
+        return success(mapWorkspace(workspace));
+      } catch (error) {
+        return failure({
+          type: 'unknown',
+          message: error instanceof Error ? error.message : String(error),
+        } as Failure);
+      }
+    }
+  );
+
+  ipcMain.handle(
     'project:list',
     async (
       _event,
@@ -220,6 +249,34 @@ export function registerProjectHandlers(config: ProjectHandlersConfig): void {
         });
 
         return success(undefined);
+      } catch (error) {
+        return failure({
+          type: 'unknown',
+          message: error instanceof Error ? error.message : String(error),
+        } as Failure);
+      }
+    }
+  );
+
+  ipcMain.handle(
+    'project:create',
+    async (
+      _event,
+      data: CreateProjectDto
+    ): Promise<IpcResult<ProjectDto>> => {
+      try {
+        const project = await services.projectRepository.createProject({
+          workspaceId: data.workspaceId,
+          name: data.name,
+          path: data.path,
+        });
+
+        services.logger.info('Created project', {
+          projectId: project.id,
+          workspaceId: project.workspaceId,
+        });
+
+        return success(mapProject(project));
       } catch (error) {
         return failure({
           type: 'unknown',

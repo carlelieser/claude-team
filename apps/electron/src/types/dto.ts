@@ -93,6 +93,17 @@ export interface PaginationDto {
   readonly limit?: number;
 }
 
+export interface CreateWorkspaceDto {
+  readonly name: string;
+  readonly path: string;
+}
+
+export interface CreateProjectDto {
+  readonly workspaceId: string;
+  readonly name: string;
+  readonly path: string;
+}
+
 export interface AgentProgressPayload {
   readonly agentId: string;
   readonly taskId: string;

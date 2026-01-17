@@ -10,6 +10,8 @@ import type {
   AgentDto,
   EventDto,
   ApprovalDto,
+  CreateWorkspaceDto,
+  CreateProjectDto,
   CreateTaskDto,
   UpdateTaskDto,
   TaskFilterDto,
@@ -26,11 +28,13 @@ export interface IpcChannels {
   'workspace:list': () => IpcResult<readonly WorkspaceDto[]>;
   'workspace:get': (id: string) => IpcResult<WorkspaceDto>;
   'workspace:getCurrent': () => IpcResult<WorkspaceDto | null>;
+  'workspace:create': (data: CreateWorkspaceDto) => IpcResult<WorkspaceDto>;
 
   'project:list': (workspaceId?: string) => IpcResult<readonly ProjectDto[]>;
   'project:get': (id: string) => IpcResult<ProjectDto>;
   'project:getCurrent': () => IpcResult<ProjectDto | null>;
   'project:switch': (id: string) => IpcResult<void>;
+  'project:create': (data: CreateProjectDto) => IpcResult<ProjectDto>;
 
   'task:list': (filter?: TaskFilterDto) => IpcResult<readonly TaskDto[]>;
   'task:get': (id: string) => IpcResult<TaskDto>;
@@ -71,10 +75,12 @@ export const IPC_INVOKE_CHANNELS: readonly (keyof IpcChannels)[] = [
   'workspace:list',
   'workspace:get',
   'workspace:getCurrent',
+  'workspace:create',
   'project:list',
   'project:get',
   'project:getCurrent',
   'project:switch',
+  'project:create',
   'task:list',
   'task:get',
   'task:create',

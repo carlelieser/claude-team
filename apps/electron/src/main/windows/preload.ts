@@ -21,12 +21,14 @@ const invokeHandlers: InvokeHandler = {
   'workspace:list': () => ipcRenderer.invoke('workspace:list'),
   'workspace:get': (id) => ipcRenderer.invoke('workspace:get', id),
   'workspace:getCurrent': () => ipcRenderer.invoke('workspace:getCurrent'),
+  'workspace:create': (data) => ipcRenderer.invoke('workspace:create', data),
 
   'project:list': (workspaceId) =>
     ipcRenderer.invoke('project:list', workspaceId),
   'project:get': (id) => ipcRenderer.invoke('project:get', id),
   'project:getCurrent': () => ipcRenderer.invoke('project:getCurrent'),
   'project:switch': (id) => ipcRenderer.invoke('project:switch', id),
+  'project:create': (data) => ipcRenderer.invoke('project:create', data),
 
   'task:list': (filter) => ipcRenderer.invoke('task:list', filter),
   'task:get': (id) => ipcRenderer.invoke('task:get', id),
