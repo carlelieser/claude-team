@@ -40,7 +40,7 @@
 
 <div class="flex flex-wrap items-center gap-4 rounded-lg border bg-card p-4">
     <Select type="single" bind:value={typeFilter}>
-        <SelectTrigger aria-labelledby="type-filter-label">
+        <SelectTrigger>
             {selectedTypeLabel}
         </SelectTrigger>
         <SelectContent>
