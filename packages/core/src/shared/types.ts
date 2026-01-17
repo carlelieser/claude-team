@@ -6,7 +6,7 @@ export type Failure =
   | {
       type: 'network' | 'timeout' | 'unknown';
       message: string;
-      cause?: Error;
+      cause?: string;
     }
   | {
       type: 'server';

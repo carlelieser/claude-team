@@ -110,7 +110,7 @@ export async function loadAgentsFromDirectory(
     return failure({
       type: 'unknown',
       message: `Failed to read directory: ${directoryPath}`,
-      cause: error instanceof Error ? error : undefined,
+      cause: error instanceof Error ? error.stack : undefined,
     });
   }
 }
@@ -197,7 +197,7 @@ export async function listAgentFiles(
     return failure({
       type: 'unknown',
       message: `Failed to list agent files in: ${directoryPath}`,
-      cause: error instanceof Error ? error : undefined,
+      cause: error instanceof Error ? error.stack : undefined,
     });
   }
 }

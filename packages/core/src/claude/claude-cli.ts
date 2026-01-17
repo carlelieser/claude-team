@@ -139,7 +139,7 @@ class DefaultClaudeCli implements ClaudeCli {
             failure({
               type: 'unknown',
               message: 'Failed to send message to Claude process',
-              cause: error instanceof Error ? error : undefined,
+              cause: error instanceof Error ? error.stack : undefined,
             })
           );
         });
