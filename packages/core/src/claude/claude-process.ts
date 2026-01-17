@@ -433,7 +433,7 @@ export function createClaudeProcess(
       type: 'unknown',
       message:
         error instanceof Error ? error.message : 'Failed to create process',
-      cause: error instanceof Error ? error.stack : undefined,
+      cause: error instanceof Error ? error : undefined,
     });
   }
 }

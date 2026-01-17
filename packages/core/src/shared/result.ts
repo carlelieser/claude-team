@@ -88,7 +88,7 @@ export async function fromPromise<T>(
       return failure({
         type: 'unknown',
         message: error.message,
-        cause: error.stack,
+        cause: error,
       });
     }
 

@@ -128,7 +128,7 @@ class DefaultTaskProcessor implements TaskProcessor {
       return failure({
         type: 'unknown',
         message: error instanceof Error ? error.message : String(error),
-        cause: error instanceof Error ? error.stack : undefined,
+        cause: error instanceof Error ? error : undefined,
       });
     } finally {
       this._activeTasks.delete(task.id);
