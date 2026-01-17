@@ -5,6 +5,9 @@
   import { Button } from '$lib/components/ui/button';
   import * as Card from '$lib/components/ui/card';
   import { Badge } from '$lib/components/ui/badge';
+  import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '$lib/components/ui/empty';
+  import FolderIcon from 'lucide-svelte/icons/folder';
+  import FolderOpenIcon from 'lucide-svelte/icons/folder-open';
 
   async function handleQuit() {
     await ipc.system.quit();
@@ -16,7 +19,7 @@
 <div class="flex-1 overflow-auto p-6">
   <div class="mx-auto max-w-2xl space-y-6">
     <Card.Root class="px-6">
-      <h2 class="mb-4 font-semibold">Current Project</h2>
+      <h2 class="font-semibold">Current Project</h2>
 
       {#if projectStore.currentProject}
         <div class="rounded-lg bg-muted p-4">
@@ -33,19 +36,35 @@
           {/if}
         </div>
       {:else}
-        <div class="rounded-lg bg-muted p-4 text-sm text-muted-foreground">
-          No project selected
-        </div>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <FolderOpenIcon />
+            </EmptyMedia>
+            <EmptyTitle>No project selected</EmptyTitle>
+            <EmptyDescription>
+              Select a project below to get started
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       {/if}
     </Card.Root>
 
     <Card.Root class="px-6">
-      <h2 class="mb-4 font-semibold">Projects</h2>
+      <h2 class="font-semibold">Projects</h2>
 
       {#if projectStore.projects.length === 0}
-        <div class="rounded-lg bg-muted p-4 text-sm text-muted-foreground">
-          No projects found
-        </div>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <FolderIcon />
+            </EmptyMedia>
+            <EmptyTitle>No projects found</EmptyTitle>
+            <EmptyDescription>
+              Create a project to start working with Claude Team
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       {:else}
         <div class="space-y-2">
           {#each projectStore.projects as project (project.id)}
