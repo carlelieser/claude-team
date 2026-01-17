@@ -30,6 +30,7 @@ export interface AppConfig {
   readonly agentsDirectory: string;
   readonly databasePath?: string;
   readonly webPath: string;
+  readonly preloadPath: string;
 }
 
 export interface App {
@@ -68,7 +69,7 @@ export async function createApp(config: AppConfig): Promise<App> {
 
   const windows = createWindowManager({
     webPath: config.webPath,
-    preloadPath: join(app.getAppPath(), 'dist', 'preload', 'preload.cjs'),
+    preloadPath: config.preloadPath,
   });
 
   const tray = createTrayManager({
@@ -124,6 +125,90 @@ export async function createApp(config: AppConfig): Promise<App> {
     state.activeTaskCount = Math.max(0, state.activeTaskCount - 1);
     tray.updateStatus('error');
     tray.updateMenu();
+  });
+
+  // Update database task status on task events
+  services.eventBus.subscribe('task.completed', async (event) => {
+    const taskId = event.payload.taskId as string;
+    if (taskId) {
+      await services.taskRepository.update(taskId, {
+        status: 'completed',
+        completedAt: new Date(),
+      });
+      const task = await services.taskRepository.findById(taskId);
+      if (task) {
+        windows.broadcastToAll('task:updated', {
+          id: task.id,
+          projectId: task.projectId,
+          agentId: task.agentId,
+          title: task.title,
+          description: task.description,
+          status: task.status,
+          priority: task.priority,
+          parentId: task.parentId,
+          createdAt: task.createdAt.toISOString(),
+          startedAt: task.startedAt?.toISOString() ?? null,
+          completedAt: task.completedAt?.toISOString() ?? null,
+          error: task.error,
+        });
+      }
+    }
+  });
+
+  services.eventBus.subscribe('task.failed', async (event) => {
+    const taskId = event.payload.taskId as string;
+    const error = event.payload.error as string;
+    if (taskId) {
+      await services.taskRepository.update(taskId, {
+        status: 'failed',
+        completedAt: new Date(),
+        error: error || 'Unknown error',
+      });
+      const task = await services.taskRepository.findById(taskId);
+      if (task) {
+        windows.broadcastToAll('task:updated', {
+          id: task.id,
+          projectId: task.projectId,
+          agentId: task.agentId,
+          title: task.title,
+          description: task.description,
+          status: task.status,
+          priority: task.priority,
+          parentId: task.parentId,
+          createdAt: task.createdAt.toISOString(),
+          startedAt: task.startedAt?.toISOString() ?? null,
+          completedAt: task.completedAt?.toISOString() ?? null,
+          error: task.error,
+        });
+      }
+    }
+  });
+
+  services.eventBus.subscribe('task.started', async (event) => {
+    const taskId = event.payload.taskId as string;
+    if (taskId) {
+      await services.taskRepository.update(taskId, {
+        status: 'in_progress',
+        startedAt: new Date(),
+      });
+      const task = await services.taskRepository.findById(taskId);
+      if (task) {
+        windows.broadcastToAll('task:updated', {
+          id: task.id,
+          projectId: task.projectId,
+          agentId: task.agentId,
+          title: task.title,
+          description: task.description,
+          status: task.status,
+          priority: task.priority,
+          parentId: task.parentId,
+          createdAt: task.createdAt.toISOString(),
+          startedAt: task.startedAt?.toISOString() ?? null,
+          completedAt: task.completedAt?.toISOString() ?? null,
+          error: task.error,
+        });
+      }
+    }
   });
 
   appInstance = {

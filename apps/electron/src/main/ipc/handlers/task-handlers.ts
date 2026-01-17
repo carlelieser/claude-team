@@ -127,6 +127,16 @@ export function registerTaskHandlers(config: TaskHandlersConfig): void {
           });
         }
 
+        // Look up the project to get workspaceId and path
+        const project = await services.projectRepository.findById(projectId);
+        if (!project) {
+          return failure({
+            type: 'notFound',
+            message: `Project not found: ${projectId}`,
+            resource: 'project',
+          });
+        }
+
         const dbTask = await services.taskRepository.createTask({
           projectId,
           agentId: data.agentId ?? null,
@@ -137,11 +147,12 @@ export function registerTaskHandlers(config: TaskHandlersConfig): void {
         });
 
         const queueInput = {
+          id: dbTask.id,
           projectId,
           title: data.title,
           metadata: {
-            cwd: process.cwd(),
-            workspaceId: state.currentWorkspaceId ?? '',
+            cwd: project.path,
+            workspaceId: project.workspaceId,
             message: data.description ?? data.title,
           },
           ...(data.agentId !== undefined && { agentId: data.agentId }),

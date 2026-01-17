@@ -24,6 +24,7 @@ export interface Task {
 }
 
 export interface CreateTaskInput {
+  readonly id?: string;
   readonly projectId: string;
   readonly agentId?: string;
   readonly title: string;

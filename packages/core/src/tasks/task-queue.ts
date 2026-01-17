@@ -32,7 +32,7 @@ class InMemoryTaskQueue implements TaskQueue {
 
   create(input: CreateTaskInput): Result<Task> {
     const task: Task = {
-      id: nanoid(),
+      id: input.id || nanoid(),
       projectId: input.projectId,
       agentId: input.agentId,
       title: input.title,
