@@ -18,6 +18,19 @@ export interface ApprovalHandlersConfig {
   readonly updateState: (updates: Partial<AppState>) => void;
 }
 
+function toSerializable(
+  value: unknown
+): Record<string, unknown> | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  try {
+    return JSON.parse(JSON.stringify(value)) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
 function mapApproval(action: AgentAction): ApprovalDto {
   return {
     id: action.id,
@@ -26,8 +39,8 @@ function mapApproval(action: AgentAction): ApprovalDto {
     projectId: action.projectId,
     actionType: action.actionType,
     target: action.target,
-    input: action.input as Record<string, unknown> | null,
-    output: action.output as Record<string, unknown> | null,
+    input: toSerializable(action.input),
+    output: toSerializable(action.output),
     reasoning: action.reasoning,
     approvalRequired: action.approvalRequired,
     approvalStatus: action.approvalStatus as ApprovalDto['approvalStatus'],

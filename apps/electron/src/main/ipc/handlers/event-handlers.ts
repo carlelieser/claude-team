@@ -16,6 +16,19 @@ export interface EventHandlersConfig {
 
 const subscriptions = new Map<string, EventSubscription>();
 
+function toSerializable(
+  value: unknown
+): Record<string, unknown> {
+  if (value === null || value === undefined) {
+    return {};
+  }
+  try {
+    return JSON.parse(JSON.stringify(value)) as Record<string, unknown>;
+  } catch {
+    return {};
+  }
+}
+
 function mapEvent(event: {
   id: string;
   type: string;
@@ -32,7 +45,7 @@ function mapEvent(event: {
     source: event.source,
     projectId: event.projectId,
     workspaceId: event.workspaceId,
-    payload: event.payload as Record<string, unknown>,
+    payload: toSerializable(event.payload),
     timestamp: event.createdAt.toISOString(),
     processed: event.processed,
   };
@@ -127,7 +140,7 @@ export function registerEventHandlers(config: EventHandlersConfig): void {
             source: typedPayload.source,
             projectId: typedPayload.projectId,
             workspaceId: typedPayload.workspaceId,
-            payload: typedPayload.payload as Record<string, unknown>,
+            payload: toSerializable(typedPayload.payload),
             timestamp: typedPayload.timestamp.toISOString(),
             processed: false,
           };
